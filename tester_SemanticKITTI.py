@@ -36,8 +36,10 @@ class ModelTester:
         self.saver = tf.train.import_meta_graph('/home/gpuserver/jinwoo/RandLA-Net/pre/snap-277357.meta')
         self.Log_file = open('log_test_' + dataset.name + '.txt', 'a')
 
+        config = tf.ConfigProto()
         config.gpu_options.per_process_gpu_memory_fraction = 0.4
         config.gpu_options.allow_growth = True
+        self.sess = tf.Session(config=config)
        
         self.sess.run(tf.global_variables_initializer())
         restore_snap = tf.train.latest_checkpoint('/home/gpuserver/jinwoo/RandLA-Net/pre/')
