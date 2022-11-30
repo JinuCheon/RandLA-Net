@@ -205,6 +205,8 @@ if __name__ == '__main__':
     dataset = SemanticKITTI(test_area)
     dataset.init_input_pipeline()
 
+    FLAGS.model_path='/home/gpuserver/jinwoo/RandLA-Net/pre/checkpoint';
+
     if Mode == 'train':
         model = Network(dataset, cfg)
         model.train(dataset)

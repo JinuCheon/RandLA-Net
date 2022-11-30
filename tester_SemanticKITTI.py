@@ -33,22 +33,20 @@ def log_out(out_str, f_out):
 class ModelTester:
     def __init__(self, model, dataset, restore_snap=None):
         my_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-        self.saver = tf.train.Saver(my_vars, max_to_keep=100)
+        self.saver = tf.train.import_meta_graph('/home/gpuserver/jinwoo/RandLA-Net/pre/snap-277357.meta')
         self.Log_file = open('log_test_' + dataset.name + '.txt', 'a')
 
-        # Create a session for running Ops on the Graph.
-        on_cpu = False
-        if on_cpu:
-            c_proto = tf.ConfigProto(device_count={'GPU': 0})
-        else:
-            c_proto = tf.ConfigProto()
-            c_proto.gpu_options.allow_growth = True
-        self.sess = tf.Session(config=c_proto)
+        config.gpu_options.per_process_gpu_memory_fraction = 0.4
+        config.gpu_options.allow_growth = True
+       
         self.sess.run(tf.global_variables_initializer())
+        restore_snap = tf.train.latest_checkpoint('/home/gpuserver/jinwoo/RandLA-Net/pre/')
+
+        print("start!!!" + tf.train.latest_checkpoint('/home/gpuserver/jinwoo/RandLA-Net/pre/'))
 
         # Name of the snapshot to restore to (None if you want to start from beginning)
         if restore_snap is not None:
-            self.saver.restore(self.sess, restore_snap)
+            self.saver.restore(self.sess, tf.train.latest_checkpoint('/home/gpuserver/jinwoo/RandLA-Net/pre/'))
             print("Model restored from " + restore_snap)
 
         self.prob_logits = tf.nn.softmax(model.logits)
