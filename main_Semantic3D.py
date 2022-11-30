@@ -9,6 +9,9 @@ import tensorflow as tf
 import numpy as np
 import pickle, argparse, os
 
+import keras.backend as K
+cfg = K.tf.ConfigProto(gpu_options={'allow_growth': True})
+K.set_session(K.tf.Session(config=cfg))
 
 class Semantic3D:
     def __init__(self):
